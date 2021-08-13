@@ -28,24 +28,47 @@
 # See docs/COPYRIGHT.rdoc for more details.
 #++
 
+# Governs the workflow of how journals are passed through:
+#   1) The notifications for any event (e.g. journal creation) is to be created as fast as possible
+#      so that it becomes visible as an in app notification. If the resource passed in is indeed a journal,
+#      it might get replaced later on (by a subsequent journal). This will lead to notifications being removed.
+#   2) After the journal aggregation time has passed as well as the desired delay, the direct email is sent out.
+#   3) At the same time (but it could aready have been triggered after the aggregation time has passed, TODO)
+#      the digest is scheduled.
 class Notifications::WorkflowJob < ApplicationJob
   include ::StateMachineJob
 
+  queue_with_priority :notification
+
   state :create,
         to: :mail do |resource, send_notification|
-    Notifications::CreateFromResourceJob
-      .perform_now(resource, send_notification)
-
-    resource
+    Notifications::CreateFromModelService
+      .new(resource)
+      .call(send_notification)
+      .all_results
+      .map(&:id)
   end
 
   state :mail,
-        wait: Setting.notification_email_delay_minutes.minutes do |resource|
+        wait: -> {
+          Setting.notification_email_delay_minutes.minutes + Setting.journal_aggregation_time_minutes.to_i.minutes
+        } do |notification_ids|
     Notification
-      .where(resource: resource)
+      .where(id: notification_ids)
+      .unread_mail
       .each do |notification|
-      Mails::NotificationJob
-        .perform_now(notification)
+        Mails::MailService
+          .new(notification)
+          .call
+      end
+
+    Notification
+      .where(id: notification_ids)
+      .unread_mail_digest
+      .each do |notification|
+
+      Mails::DigestJob
+        .schedule(notification)
     end
   end
 end

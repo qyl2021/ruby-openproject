@@ -1,3 +1,5 @@
+#-- encoding: UTF-8
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) 2012-2021 the OpenProject GmbH
@@ -26,52 +28,47 @@
 # See docs/COPYRIGHT.rdoc for more details.
 #++
 
-class Mails::NotificationJob < ApplicationJob
-  queue_with_priority :notification
-
-  def perform(notification)
-    @notification = notification
-
-    ensure_supported
-
-    return if ian_read?
-
-    strategy.send_mail(notification)
+module Notifications::CreateFromModelService::WikiContentStrategy
+  def self.reasons
+    %i(watched subscribed)
   end
 
-  private
+  def self.permission
+    :view_wiki_pages
+  end
 
-  attr_accessor :notification
+  def self.supports_ian?
+    false
+  end
 
-  def ensure_supported
-    unless supported?
-      raise ArgumentError, "Sending mails for notifications is not supported for #{strategy_model}"
+  def self.supports_mail_digest?
+    false
+  end
+
+  def self.supports_mail?
+    true
+  end
+
+  def self.subscribed_users(journal)
+    User.notified_on_all(journal.data.project)
+  end
+
+  def self.watcher_users(journal)
+    page = journal.journable.page
+
+    if journal.initial?
+      page.wiki.watcher_recipients
+    else
+      page.wiki.watcher_recipients
+          .or(page.watcher_recipients)
     end
   end
 
-  def ian_read?
-    notification.read_ian
+  def self.project(journal)
+    journal.data.project
   end
 
-  def strategy
-    @strategy ||= if self.class.const_defined?("#{strategy_model}Strategy")
-                    "#{self.class}::#{strategy_model}Strategy".constantize
-                  end
-  end
-
-  def strategy_model
-    journal&.journable_type || resource&.class
-  end
-
-  def journal
-    notification.journal
-  end
-
-  def resource
-    notification.resource
-  end
-
-  def supported?
-    strategy.present?
+  def self.user(journal)
+    journal.user
   end
 end

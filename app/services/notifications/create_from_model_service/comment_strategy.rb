@@ -28,32 +28,40 @@
 # See docs/COPYRIGHT.rdoc for more details.
 #++
 
-module Notifications::CreateFromJournalJob::WorkPackageStrategy
+module Notifications::CreateFromModelService::CommentStrategy
   def self.reasons
-    %i(mentioned involved watched subscribed commented created processed prioritized scheduled)
+    %i(watched subscribed)
   end
 
   def self.permission
-    :view_work_packages
+    :view_news
   end
 
   def self.supports_ian?
-    true
+    false
   end
 
   def self.supports_mail_digest?
-    true
+    false
   end
 
   def self.supports_mail?
     true
   end
 
-  def self.subscribed_users(journal)
-    User.notified_on_all(journal.data.project)
+  def self.subscribed_users(comment)
+    User.notified_on_all(project(comment))
   end
 
-  def self.watcher_users(journal)
-    journal.journable.watcher_recipients
+  def self.watcher_users(comment)
+    comment.commented.watcher_recipients
+  end
+
+  def self.project(comment)
+    comment.commented.project
+  end
+
+  def self.user(comment)
+    comment.author
   end
 end
