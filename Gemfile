@@ -160,7 +160,7 @@ group :production do
 end
 
 gem 'i18n-js', '~> 3.8.0'
-gem 'rails-i18n', '~> 6.0.0'
+gem 'rails-i18n', '~> 8.0.0'
 gem 'sprockets', '~> 3.7.0'
 
 # required by Procfile, for deployment on heroku or packaging with packager.io.
