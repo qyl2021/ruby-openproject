@@ -297,7 +297,7 @@ gem 'grape', '~> 1.5.0'
 gem 'roar', '~> 1.1.0'
 
 # CORS for API
-gem 'rack-cors', '~> 1.1.1'
+gem 'rack-cors', '~> 3.0.0'
 
 # Required for contracts
 gem 'disposable', '~> 0.4.7'
