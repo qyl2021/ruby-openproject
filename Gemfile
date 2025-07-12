@@ -34,7 +34,7 @@ gem 'actionpack-xml_parser', '~> 2.0.0'
 gem 'activemodel-serializers-xml', '~> 1.0.1'
 gem 'activerecord-import', '~> 1.0.2'
 gem 'activerecord-session_store', '~> 2.0.0'
-gem 'rails', '~> 6.1.3'
+gem 'rails', '~> 7.0.0'
 gem 'responders', '~> 3.0'
 
 gem 'rdoc', '>= 2.4.2'
@@ -77,15 +77,15 @@ gem 'commonmarker', '~> 0.21.0'
 
 # HTML pipeline for transformations on text formatter output
 # such as sanitization or additional features
-gem 'html-pipeline', '~> 2.14.0'
+gem 'html-pipeline', '~> 3.0.0'
 # Tasklist parsing and renderer
-gem 'deckar01-task_list', '~> 2.3.1'
+gem 'deckar01-task_list', '~> 2.3.3'
 # Requires escape-utils for faster escaping
 gem 'escape_utils', '~> 1.0'
 # Syntax highlighting used in html-pipeline with rouge
 gem 'rouge', '~> 3.26.0'
 # HTML sanitization used for html-pipeline
-gem 'sanitize', '~> 5.2.1'
+gem 'sanitize', '~> 6.0.0'
 # HTML autolinking for mails and urls (replaces autolink)
 gem 'rinku', '~> 2.0.4'
 # Version parsing with semver
