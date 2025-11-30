@@ -30,11 +30,11 @@
     "ts-node": "~8.3.0"
   },
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.1102.2",
+    "@angular-devkit/build-angular": "~13.2.0",
     "@angular/animations": "~11.2.3",
     "@angular/cdk": "^11.2.2",
     "@angular/cli": "~11.2.2",
-    "@angular/common": "~11.2.3",
+    "@angular/common": "~19.2.16",
     "@angular/compiler": "~11.2.3",
     "@angular/compiler-cli": "~11.2.3",
     "@angular/core": "~11.2.3",
