@@ -191,9 +191,9 @@ gem 'mini_magick', '~> 4.11.0', require: false
 
 # Sentry error reporting, loaded on demand
 group :sentry do
-  gem "sentry-ruby", '~> 4.3.1',  require: false
-  gem "sentry-rails", '~> 4.3.3', require: false
-  gem "sentry-delayed_job", '~> 4.3.0', require: false
+  gem "sentry-ruby", "~> 4.4.0", require: false
+  gem "sentry-rails", "~> 4.4.0", require: false
+  gem "sentry-delayed_job", "~> 4.4.0", require: false
 end
 
 group :test do
@@ -283,11 +283,11 @@ group :development, :test do
   gem 'pry-stack_explorer', '~> 0.6.0'
 
   # Dangerfile scanner on travis and locally
-  gem 'danger', '~> 8.2.0'
+  gem 'danger', '~> 9.2.0'
 
   # Brakeman scanner
   gem 'brakeman', '~> 5.0.0'
-  gem 'danger-brakeman'
+  gem 'danger-brakeman', '>= 0.0.3'
 end
 
 gem 'bootsnap', '~> 1.7.0', require: false
